@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pi | Digital Garden</title>
+    <meta name="description" content="Personal portfolio and thoughts on AI, Automation, and Investment." />
+    <!-- Added typography plugin -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+      
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #EEEDEB; /* Warm Matte Grey */
+        color: #1F1F1F; /* Dark Charcoal */
+      }
+      
+      code, pre {
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      /* Custom scrollbar for Webkit */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #EEEDEB; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #C0C0C0; 
+        border-radius: 5px;
+        border: 2px solid #EEEDEB;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #A0A0A0; 
+      }
+      
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .animate-fade-in-up {
+        animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "react-markdown": "https://esm.sh/react-markdown@9",
+    "js-yaml": "https://esm.sh/js-yaml@4.1.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
