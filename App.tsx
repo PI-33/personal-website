@@ -2,15 +2,10 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { CONFIG } from './constants';
 import { Card, ActionButton, Tag } from './components/UI';
 import { BlogList, BlogDetail } from './components/Blog';
+import HeroCard from './components/HeroCard';
 import { fetchAllPosts } from './lib/content';
 import { BlogPost } from './types';
-import { Github, Twitter, Linkedin, Mail, ExternalLink, BookOpen, Activity, ArrowUpRight, Cpu, Briefcase, Rocket, User, Loader2 } from 'lucide-react';
-
-const IconMap: Record<string, React.ReactNode> = {
-  Github: <Github size={20} />,
-  Twitter: <Twitter size={20} />,
-  Linkedin: <Linkedin size={20} />,
-};
+import { Github, Mail, ExternalLink, BookOpen, ArrowUpRight, Briefcase, Rocket, User, Loader2 } from 'lucide-react';
 
 // --- Reusable Module Card Component ---
 const ModuleCard = ({ 
@@ -81,90 +76,37 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#EEEDEB] text-[#1F1F1F] font-sans selection:bg-[#FF6B00] selection:text-white">
-      
-      {/* --- Static Minimal Header --- */}
-      <nav className="w-full py-8 md:py-12">
-        <div className="max-w-4xl mx-auto px-6 flex justify-between items-center">
-            <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setView({ type: 'about' })}>
-              {/* Logo Mark - Orange Dot */}
-              <div className="w-3.5 h-3.5 bg-[#FF6B00] rounded-full shadow-sm group-hover:scale-110 transition-transform duration-200"></div>
-              <span className="font-bold text-xl tracking-tight text-[#1F1F1F]">Pi</span>
+
+      {/* --- Full-screen Digital Business Card --- */}
+      {view.type !== 'post' && <HeroCard />}
+
+      {/* --- Sticky Header (appears after scrolling past card) --- */}
+      <nav className="sticky top-0 z-50 bg-[#EEEDEB]/85 backdrop-blur-md border-b border-neutral-200/60">
+        <div className="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div className="flex items-center gap-3 cursor-pointer group" onClick={() => { setView({ type: 'about' }); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+              <div className="w-3 h-3 bg-[#FF6B00] rounded-full group-hover:scale-110 transition-transform duration-200"></div>
+              <span className="font-bold text-lg tracking-tight text-[#1F1F1F]">Pi</span>
             </div>
 
-            <div className="flex gap-6">
-               {CONFIG.socials.map((social) => (
-                 <a 
-                  key={social.platform} 
-                  href={social.url} 
-                  target="_blank" 
-                  rel="noreferrer"
-                  className="text-neutral-500 hover:text-[#FF6B00] transition-colors p-1"
-                  aria-label={social.platform}
-                 >
-                   {IconMap[social.iconName] || <ExternalLink size={20} />}
-                 </a>
-               ))}
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setView({ type: 'about' })}
+                className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-md transition-all duration-200 ${view.type === 'about' ? 'bg-[#1A1A1A] text-white' : 'text-neutral-500 hover:text-[#1A1A1A] hover:bg-neutral-200/60'}`}
+              >
+                Home
+              </button>
+              <button
+                onClick={() => setView({ type: 'thoughts' })}
+                className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-md transition-all duration-200 ${view.type === 'thoughts' ? 'bg-[#1A1A1A] text-white' : 'text-neutral-500 hover:text-[#1A1A1A] hover:bg-neutral-200/60'}`}
+              >
+                Essays
+              </button>
             </div>
         </div>
       </nav>
 
       {/* --- Main Content Container --- */}
-      <main className="max-w-4xl mx-auto px-6 pb-20">
-        
-        {/* Header / Hero - Only show on top level views */}
-        {view.type !== 'post' && (
-          <header className="mb-16 animate-fade-in-up">
-            <div className="flex flex-col md:flex-row gap-10 items-start md:items-center">
-               <div className="relative group">
-                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-[6px] border-[#FDFDFD] shadow-xl relative z-10 grayscale-[10%] group-hover:grayscale-0 transition-all duration-500">
-                    <img src={CONFIG.profile.avatarUrl} alt={CONFIG.profile.name} className="w-full h-full object-cover" />
-                  </div>
-                  <div className="absolute -inset-2 border border-neutral-300 rounded-full -z-10 border-dashed opacity-40"></div>
-                  <div className="absolute -bottom-1 -right-1 w-10 h-10 bg-[#FF6B00] rounded-full flex items-center justify-center border-4 border-[#EEEDEB] z-20 shadow-md">
-                    <Activity size={18} className="text-white" />
-                  </div>
-               </div>
-
-               <div className="flex-1">
-                 <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-[#1A1A1A] mb-4">
-                   {CONFIG.profile.name}
-                 </h1>
-                 <p className="text-xl text-[#555] mb-6 leading-relaxed max-w-xl font-medium">
-                   {CONFIG.profile.tagline}
-                 </p>
-                 <div className="flex flex-wrap gap-2">
-                   {CONFIG.interests.map((interest, idx) => (
-                     <span key={idx} className="px-3 py-1.5 bg-[#E5E5E5] text-[#1A1A1A] rounded-md text-xs font-bold uppercase tracking-wider">
-                       {interest}
-                     </span>
-                   ))}
-                 </div>
-               </div>
-            </div>
-          </header>
-        )}
-
-        {/* --- Tab Switcher (Only on main views) --- */}
-        {view.type !== 'post' && (
-          <div className="mb-12">
-            <div className="border-b border-[#D4D4D4] flex gap-8">
-              <button 
-                onClick={() => setView({ type: 'about' })}
-                className={`group pb-4 text-sm font-bold uppercase tracking-wider transition-all duration-200 border-b-4 ${view.type === 'about' ? 'border-[#FF6B00] text-[#1A1A1A]' : 'border-transparent text-neutral-400 hover:text-neutral-600'}`}
-              >
-                <span className="mr-2 inline-block transition-transform group-hover:-translate-y-1">🏠</span> 
-                / HOME
-              </button>
-              <button 
-                onClick={() => setView({ type: 'thoughts' })}
-                className={`group pb-4 text-sm font-bold uppercase tracking-wider transition-all duration-200 border-b-4 ${view.type === 'thoughts' ? 'border-[#FF6B00] text-[#1A1A1A]' : 'border-transparent text-neutral-400 hover:text-neutral-600'}`}
-              >
-                <span className="mr-2 inline-block transition-transform group-hover:-translate-y-1">✍️</span> 
-                / ESSAYS
-              </button>
-            </div>
-          </div>
-        )}
+      <main className="max-w-4xl mx-auto px-6 pb-20 pt-12">
 
         {/* --- Content Views --- */}
         <div className="min-h-[400px] transition-opacity duration-300">
@@ -211,7 +153,7 @@ export default function App() {
               {/* 2. EXPERIENCE */}
               <ModuleCard 
                 title="Experience" 
-                subtitle="Operational History" 
+                subtitle="成长路线" 
                 icon={Briefcase}
               >
                  <div className="relative border-l-2 border-[#E5E5E5] ml-3 space-y-12 pl-8 py-2">
@@ -237,7 +179,7 @@ export default function App() {
               {/* 3. PROJECTS */}
               <ModuleCard 
                 title="Projects" 
-                subtitle="Deployed Units" 
+                subtitle="造过的东西" 
                 icon={Rocket}
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -249,7 +191,7 @@ export default function App() {
                             <BookOpen size={20} className="text-[#1A1A1A]" />
                           </div>
                           {project.link && (
-                            <a href={project.link} className="text-neutral-400 hover:text-[#FF6B00] transition-colors bg-white border border-[#EEE] p-2 rounded-md hover:border-[#FF6B00]/30">
+                            <a href={project.link} target="_blank" rel="noreferrer" className="text-neutral-400 hover:text-[#FF6B00] transition-colors bg-white border border-[#EEE] p-2 rounded-md hover:border-[#FF6B00]/30">
                               <ArrowUpRight size={18} />
                             </a>
                           )}
